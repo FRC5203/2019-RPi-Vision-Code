@@ -26,10 +26,7 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.vision.VisionPipeline;
 import edu.wpi.first.vision.VisionThread;
-
-import edu.wpi.first.networktables.EntryListenerFlags;
 
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;

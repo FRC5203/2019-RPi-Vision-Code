@@ -40,7 +40,8 @@ public class VisionMethods {
         }
 
         /* After creating all the shapes, loop through them to check if any are made of only a few pixels, if so
-        *  they shouldn't be counted as a shape and should be deleted
+        *  they shouldn't be counted as a shape and should be deleted. Also delete shapes that aren't the two we want
+        *  to focus on (i.e. another hatch that is nearby but not the closest hatch that we want to go to)
         *
         *  NOTE: that we have to make another list to store the shapes to delete because removing things from 
         *  a list while iterating through that list will cause an error due to commodification
@@ -48,16 +49,64 @@ public class VisionMethods {
         ArrayList<ArrayList<Point>> shapesToDelete = new ArrayList<ArrayList<Point>>();
 
         //Add shapes that need to be deleted
-        for(ArrayList<Point> shape : shapes){
+        for(int i = 0; i < shapes.size(); i++){
+            
+            ArrayList<Point> shape = shapes.get(i);
+            
             if(shape.size() < 10){
                 shapesToDelete.add(shape);
+                continue;
             }
+            int[] distances = DistancesBetweenShapes(shape, shapes.get(i + 1));
+            if(i == 0 && distances[0] > distances[1]){
+                shapesToDelete.add(shape);
+            }
+
         }
         //Remove shapes that were added to shapesToDelete
         for(ArrayList<Point> shape : shapesToDelete){
             shapes.remove(shape);
         }
         return shapes;
+    }
+
+    public static int[] DistancesBetweenShapes(ArrayList<Point> s1, ArrayList<Point> s2){
+        int[] distances = new int[2];
+
+        //All of the points we will need to find the distances
+        Point s1_highestPoint = s1.get(0);
+        Point s1_lowestPoint = s1.get(0);
+        Point s2_highestPoint = s2.get(0);
+        Point s2_lowestPoint = s2.get(0);
+
+        //Find the highest and lowest points in shape 1
+        for(Point p : s1){
+            if(p.y < s1_highestPoint.y){
+                s1_highestPoint = p;
+            }
+            else if(p.y > s1_lowestPoint.y){
+                s1_lowestPoint = p;
+            }
+        }
+        //Find the highest and lowest points in shape 2
+        for(Point p : s2){
+            if(p.y < s2_highestPoint.y){
+                s1_highestPoint = p;
+            }
+            else if(p.y > s1_lowestPoint.y){
+                s1_lowestPoint = p;
+            }
+        }
+        //Assign the distance between the highest points
+        distances[0] = (int)s1_highestPoint.x - (int)s2_highestPoint.x;
+        //Assign the distance between the lowest points
+        distances[1] = (int)s1_lowestPoint.x - (int)s2_lowestPoint.x;
+
+        return distances;
+    }
+
+    public static void DetermineX(ArrayList<ArrayList<Point>> shapes){
+        
     }
 
 }

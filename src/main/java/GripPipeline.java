@@ -13,6 +13,7 @@ import org.opencv.features2d.FeatureDetector;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.*;
 import org.opencv.objdetect.*;
+
 import edu.wpi.first.vision.VisionPipeline;
 
 /**
@@ -36,13 +37,12 @@ public class GripPipeline implements VisionPipeline {
 	/**
 	 * This is the primary method that runs the entire pipeline and updates the outputs.
 	 */
-	@Override
-	public void process(Mat source0) {
+	@Override	public void process(Mat source0) {
 		// Step RGB_Threshold0:
 		Mat rgbThresholdInput = source0;
-		double[] rgbThresholdRed = {131, 207};
-		double[] rgbThresholdGreen = {116, 198};
-		double[] rgbThresholdBlue = {0, 84};
+		double[] rgbThresholdRed = {0, 255};
+		double[] rgbThresholdGreen = {243, 255};
+		double[] rgbThresholdBlue = {122, 255};
 		rgbThreshold(rgbThresholdInput, rgbThresholdRed, rgbThresholdGreen, rgbThresholdBlue, rgbThresholdOutput);
 
 		// Step Find_Contours0:
@@ -52,13 +52,13 @@ public class GripPipeline implements VisionPipeline {
 
 		// Step Filter_Contours0:
 		ArrayList<MatOfPoint> filterContoursContours = findContoursOutput;
-		double filterContoursMinArea = 0;
-		double filterContoursMinPerimeter = 0;
+		double filterContoursMinArea = 1000.0;
+		double filterContoursMinPerimeter = 0.0;
 		double filterContoursMinWidth = 0;
-		double filterContoursMaxWidth = 1000;
-		double filterContoursMinHeight = 0;
-		double filterContoursMaxHeight = 1000;
-		double[] filterContoursSolidity = {0, 100};
+		double filterContoursMaxWidth = 1000.0;
+		double filterContoursMinHeight = 0.0;
+		double filterContoursMaxHeight = 1000.0;
+		double[] filterContoursSolidity = {68, 100.0};
 		double filterContoursMaxVertices = 1000000;
 		double filterContoursMinVertices = 0;
 		double filterContoursMinRatio = 0;

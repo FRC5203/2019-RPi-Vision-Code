@@ -283,31 +283,9 @@ public final class Main {
           //If the contours found in the processed image is greater than 10, there is probably an object worth processing there (value needs testing)
           if(pipeline.filterContoursOutput().size() > 10){
 
-            //Totals of the x's and y's of all contours
-            int xTotal = 0, yTotal = 0;
-            //Total of all contours (using filterContoursOutput().size() will not give you all the points because a matOfPoint holds even more points inside of itself)
-            int contourTotal = 0;
+            Hatch hatch = VisionMethods.GetHatch(pipeline);
+            xEntry.setDouble(hatch.middle());
 
-            //Loop through all the contour matrices
-            for(MatOfPoint m : pipeline.filterContoursOutput()){
-              //Loop through all the points (x's and y's) in the matrix
-              for(Point p : m.toList()){
-                contourTotal++;
-                xTotal += p.x;
-                yTotal += p.y;
-              }
-            }
-
-            //Find the averages of the x and y totals by dividing them by the total number of contours (points)
-            int xAvg = xTotal / contourTotal;
-            int yAvg = yTotal / contourTotal;
-
-            //Feed the network table the average x and y of the feed
-            xEntry.setDouble(xAvg);
-            yEntry.setDouble(yAvg);
-
-            //For seeing the x and y in the RPi's console output if you don't have access to the RIO
-            System.out.println(xAvg + ", " + yAvg);
           }
         }
       });

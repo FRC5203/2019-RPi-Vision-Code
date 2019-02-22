@@ -5,6 +5,9 @@ import org.opencv.core.Point;
 
 public class VisionMethods {
 
+    public static int xMaxForShape = 10;
+    public static int yMaxForShape = 60;
+    
     /*Enable if you want to better equate the shapes that are in the sight of the robot
     * (i.e. if there are four shapes, figure out exactly which ones are hatches and which ones to focus on)
     * We shouldn't need to use advanced filters because the robot can probably drive up to the hatch acurately enough to
@@ -33,13 +36,13 @@ public class VisionMethods {
 
                 //if the difference in x values is bigger than 5
                 //but the difference in y values is less than 5, then create a new shape (list) and add this point
-                if(p.x - lastPoint.x > 5 && p.y - lastPoint.y < 5){
+                if(p.x - lastPoint.x > xMaxForShape && p.y - lastPoint.y < 5){
                     shapes.add(new Shape());
                     shapes.get(shapes.size() - 1).add(p);
                     lastPoint = p;
                 }
                 //else if the difference in y values is less than 5, add it to the current shape
-                else if(p.y - lastPoint.y < 5){
+                else if(p.y - lastPoint.y < yMaxForShape){
                     shapes.get(shapes.size() - 1).add(p);
                     lastPoint = p;
                 }
@@ -73,6 +76,7 @@ public class VisionMethods {
 
         ArrayList<Hatch> hatches = new ArrayList<>();
         if(shapes.size() > 2){
+            
             for(int i = 0; i < shapes.size(); i++){
                 Shape shape = shapes.get(i);
                 if(i != shapes.size() - 1 && shape.leansRight() && !shapes.get(i + 1).leansRight()){
@@ -81,18 +85,32 @@ public class VisionMethods {
                 }
             }
             if(hatches.size() == 1){
+                System.out.println("There is one hatch");
                 return hatches.get(0);
             }
-            Hatch closestHatch = hatches.get(0);
-            for(int i = 1; i < hatches.size(); i++){
-                Hatch hatch = hatches.get(i);
-                if(Math.abs(hatch.middle() - 80) < Math.abs(closestHatch.middle() - 80)){
-                    closestHatch = hatch;
+            else if (hatches.size() > 1){
+                System.out.println("There is more than one hatch");
+                Hatch closestHatch = hatches.get(0);
+                for(int i = 1; i < hatches.size(); i++){
+                    Hatch hatch = hatches.get(i);
+                    if(Math.abs(hatch.middle() - 80) < Math.abs(closestHatch.middle() - 80)){
+                        closestHatch = hatch;
+                    }
                 }
+                return closestHatch;
             }
-            return closestHatch;
+            
         }
-        return new Hatch(shapes.get(0), shapes.get(1));
+        else if(shapes.size() == 1){
+            System.out.println("There is only one shape");
+            return null;
+        }
+        else{
+            System.out.println("There are no shapes");
+            return null;
+        }
+        System.out.println("There are no shapes");
+        return null;
     }
 
 }

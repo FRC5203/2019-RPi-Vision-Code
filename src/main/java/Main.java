@@ -280,12 +280,11 @@ public final class Main {
           //call the process function in the GripPipeline class to process the mat
           pipeline.process(mat);
 
-          //If the contours found in the processed image is greater than 10, there is probably an object worth processing there (value needs testing)
-          if(pipeline.filterContoursOutput().size() > 10){
-
+          if(pipeline.filterContoursOutput().size() > 0){
             Hatch hatch = VisionMethods.GetHatch(pipeline);
-            xEntry.setDouble(hatch.middle());
-
+            if(hatch != null){
+              xEntry.setDouble(hatch.middle());
+            }
           }
         }
       });

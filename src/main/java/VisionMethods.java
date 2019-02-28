@@ -1,7 +1,10 @@
+import java.io.*;
 import java.util.ArrayList;
 
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
+
+import edu.wpi.first.networktables.NetworkTableEntry;
 
 public class VisionMethods {
 
@@ -21,10 +24,36 @@ public class VisionMethods {
         shapes.add(new Shape());
         Point lastPoint = null;
 
+        System.out.println("GetHatch() start");
+
+        BufferedWriter writer = null;
+        try{
+            writer = new BufferedWriter(new FileWriter("saved.txt"));
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+
         boolean firstPoint = true;
         for(MatOfPoint m : pipeline.filterContoursOutput()){
+            System.out.println();
             for(int i = 0; i < m.toList().size(); i++){
                 Point p = m.toList().get(i);
+                if(firstPoint){
+                   //Delete me at some point
+                    try{
+                        writer.write(p.x + ", " + p.y);
+                        writer.write("First point in mat of point number: " + pipeline.filterContoursOutput().indexOf(m) + System.lineSeparator());
+                    } 
+                    catch(Exception e){
+                    }
+                }
+                
+                //Delte me at some point
+                try{
+                    writer.write(p.x + ", " + p.y + System.lineSeparator());
+                } 
+                catch(Exception e){
+                }
                 
                 //If this is the first point, then don't bother trying to compare it and just continue to the next point
                 if(firstPoint){
@@ -36,19 +65,26 @@ public class VisionMethods {
 
                 //if the difference in x values is bigger than 5
                 //but the difference in y values is less than 5, then create a new shape (list) and add this point
-                if(p.x - lastPoint.x > xMaxForShape && p.y - lastPoint.y < 5){
+                if(Math.abs(p.x - lastPoint.x) > xMaxForShape && Math.abs(p.y - lastPoint.y) < 5){
                     shapes.add(new Shape());
                     shapes.get(shapes.size() - 1).add(p);
                     lastPoint = p;
                 }
                 //else if the difference in y values is less than 5, add it to the current shape
-                else if(p.y - lastPoint.y < yMaxForShape){
+                else if(Math.abs(p.y - lastPoint.y) < yMaxForShape){
                     shapes.get(shapes.size() - 1).add(p);
                     lastPoint = p;
                 }
                 //if the code reaches this point, the contour is a stray and should be ignored
             }
         }
+
+        try{
+            writer.close();
+        }
+        catch(Exception e){
+        }
+        
 
         /* After creating all the shapes, loop through them to check if any are made of only a few pixels, if so
         *  they shouldn't be counted as a shape and should be deleted. Also, if the useAdvancedFilters boolean is true, 

@@ -271,6 +271,7 @@ public final class Main {
       * The camera is defaultly configured to by 160 x 120 at 30 fps
       *
       */
+      
 
       VisionThread visionThread = new VisionThread(cameras.get(0), new GripPipeline(), pipeline -> {
         
@@ -286,6 +287,9 @@ public final class Main {
               xEntry.setDouble(hatch.middle());
             }
           }
+        }
+        else{
+          System.out.println("Empty?");
         }
       });
       //Began the thread (keep in mind that a "vision thread" is basically treated the same as any java thread for our purposes)

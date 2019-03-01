@@ -244,7 +244,7 @@ public final class Main {
     //Get the table specifically holding vision data (this table is created if it doesn't already exist)
     ntTable = ntinst.getTable("visiontable");
 
-    //Get or create an entry in the table for the x and y data
+    //Get or create an entry in the table for the y and x data
     xEntry = ntTable.getEntry("X");
     yEntry = ntTable.getEntry("Y");
 
@@ -261,7 +261,7 @@ public final class Main {
       //Mat inputMat = Imgcodecs.imread(".\\src\\main\\java\\VisionTestImage.jpg");
 
       //Make the mat that will store the image data
-      Mat mat = new Mat();
+      //Mat mat = new Mat();
 
       //Make a video sink for the camera feed, this sink will generate the camera feed into a mat
       CvSink cvSink = CameraServer.getInstance().getVideo();
@@ -271,25 +271,31 @@ public final class Main {
       * The camera is defaultly configured to by 160 x 120 at 30 fps
       *
       */
-      
-
       VisionThread visionThread = new VisionThread(cameras.get(0), new GripPipeline(), pipeline -> {
         
+        Mat mat;
         //Get the camera frame and use it for the mat. grabFrame() will return a number value, if it is zero, there is nothing there and we shouldn't process it
-        if(cvSink.grabFrame(mat) != 0){
+        //cvSink.grabFrame(mat) != 0
+        if(true){
           
+          mat = Imgcodecs.imread(image);
           //call the process function in the GripPipeline class to process the mat
           pipeline.process(mat);
 
+          //Are there contours to get a hatch from? If not then print that there are none
           if(pipeline.filterContoursOutput().size() > 0){
             Hatch hatch = VisionMethods.GetHatch(pipeline);
+            //If the hatch returned from the GetHatch() method was not null, then give the network table the middle x value
             if(hatch != null){
               xEntry.setDouble(hatch.middle());
             }
           }
+          else{
+            System.out.println("No contours");
+          }
         }
         else{
-          System.out.println("Empty?");
+          System.out.println("Empty Image");
         }
       });
       //Began the thread (keep in mind that a "vision thread" is basically treated the same as any java thread for our purposes)

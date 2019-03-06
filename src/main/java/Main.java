@@ -5,6 +5,8 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -261,7 +263,7 @@ public final class Main {
       //Mat inputMat = Imgcodecs.imread(".\\src\\main\\java\\VisionTestImage.jpg");
 
       //Make the mat that will store the image data
-      //Mat mat = new Mat();
+      Mat mat = new Mat();
 
       //Make a video sink for the camera feed, this sink will generate the camera feed into a mat
       CvSink cvSink = CameraServer.getInstance().getVideo();
@@ -272,13 +274,10 @@ public final class Main {
       *
       */
       VisionThread visionThread = new VisionThread(cameras.get(0), new GripPipeline(), pipeline -> {
-        
-        Mat mat;
+
         //Get the camera frame and use it for the mat. grabFrame() will return a number value, if it is zero, there is nothing there and we shouldn't process it
-        //cvSink.grabFrame(mat) != 0
-        if(true){
+        if(cvSink.grabFrame(mat) != 0){
           
-          mat = Imgcodecs.imread(image);
           //call the process function in the GripPipeline class to process the mat
           pipeline.process(mat);
 
@@ -287,15 +286,22 @@ public final class Main {
             Hatch hatch = VisionMethods.GetHatch(pipeline);
             //If the hatch returned from the GetHatch() method was not null, then give the network table the middle x value
             if(hatch != null){
-              xEntry.setDouble(hatch.middle());
+              xEntry.setDouble(hatch.middleX());
             }
           }
           else{
-            System.out.println("No contours");
+            VisionMethods.println("No contours");
           }
         }
         else{
-          System.out.println("Empty Image");
+          VisionMethods.println("Empty Image");
+        }
+        try {
+          BufferedWriter writer = new BufferedWriter(new FileWriter("consoleOutput.txt"));
+          writer.write(VisionMethods.output);
+          writer.close();
+        } catch (IOException ex) {
+          ex.printStackTrace();
         }
       });
       //Began the thread (keep in mind that a "vision thread" is basically treated the same as any java thread for our purposes)
@@ -306,9 +312,9 @@ public final class Main {
     for (;;) {
       try {
         Thread.sleep(10000);
-      } catch (InterruptedException ex) {
+      } catch (InterruptedException e) {
         //Print the stack then exit the loop (end the process)
-        ex.printStackTrace();
+        e.printStackTrace();
         return;
       }
     }

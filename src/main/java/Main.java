@@ -287,6 +287,7 @@ public final class Main {
             //If the hatch returned from the GetHatch() method was not null, then give the network table the middle x value
             if(hatch != null){
               xEntry.setDouble(hatch.middleX());
+              VisionMethods.println("Hatch middle x value is: " + hatch.middleX());
             }
           }
           else{
@@ -294,15 +295,15 @@ public final class Main {
           }
         }
         else{
-          VisionMethods.println("Empty Image");
+          VisionMethods.println("Skipping frame");
         }
-        try {
+        /*try {
           BufferedWriter writer = new BufferedWriter(new FileWriter("consoleOutput.txt"));
-          writer.write(VisionMethods.output);
+          //writer.write(VisionMethods.output);
           writer.close();
         } catch (IOException ex) {
           ex.printStackTrace();
-        }
+        }*/
       });
       //Began the thread (keep in mind that a "vision thread" is basically treated the same as any java thread for our purposes)
       visionThread.start();

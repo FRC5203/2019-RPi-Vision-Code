@@ -8,6 +8,6 @@ public class Hatch {
         this.s2 = s2;
     }
     public double middleX(){
-        return s1.rightMostPoint.x + s2.leftMostPoint.x / 2;
+        return (s1.rightMostPoint.x + s2.leftMostPoint.x) / 2;
     }
 }

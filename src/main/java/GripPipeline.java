@@ -1,3 +1,6 @@
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -37,9 +40,9 @@ public class GripPipeline implements VisionPipeline {
 	@Override	public void process(Mat source0) {
 		// Step RGB_Threshold0:
 		Mat rgbThresholdInput = source0;
-		double[] rgbThresholdRed = {0, 255};
-		double[] rgbThresholdGreen = {243, 255};
-		double[] rgbThresholdBlue = {122, 255};
+		double[] rgbThresholdRed = {0.0, 255.0};
+		double[] rgbThresholdGreen = {243.0755395683453, 255.0};
+		double[] rgbThresholdBlue = {121.53776978417265, 255.0};
 		rgbThreshold(rgbThresholdInput, rgbThresholdRed, rgbThresholdGreen, rgbThresholdBlue, rgbThresholdOutput);
 
 		// Step Find_Contours0:
@@ -55,8 +58,8 @@ public class GripPipeline implements VisionPipeline {
 		double filterContoursMaxWidth = 1000.0;
 		double filterContoursMinHeight = 0.0;
 		double filterContoursMaxHeight = 1000.0;
-		double[] filterContoursSolidity = {68, 100.0};
-		double filterContoursMaxVertices = 1000000;
+		double[] filterContoursSolidity = {68.34532374100719, 100.0};
+		double filterContoursMaxVertices = 1000000.0;
 		double filterContoursMinVertices = 0.0;
 		double filterContoursMinRatio = 0.0;
 		double filterContoursMaxRatio = 1000.0;

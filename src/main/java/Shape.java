@@ -5,7 +5,7 @@ import java.util.Collection;
 
 public class Shape {
 
-    private ArrayList<Point> points = new ArrayList<>();
+    private ArrayList<Point> points;
     
     //These point variables are caches for their respective functions which is why they are private
     public Point highestPoint;
@@ -21,9 +21,11 @@ public class Shape {
 
     }
     public Shape(Collection<? extends Point> points){
+        this.points = new ArrayList<>();
         this.points.addAll(points);
     }
     public Shape(Point[] points){
+        this.points = new ArrayList<>();
         this.points.addAll(Arrays.asList(points));
     }
 
@@ -47,6 +49,9 @@ public class Shape {
         points.add(p);
     }
     public void addAll(Collection<? extends Point> points){
+        if(this.points == null){
+            this.points = new ArrayList<>();
+        }
         this.points.addAll(points);
     }
     public void remove(Point p){

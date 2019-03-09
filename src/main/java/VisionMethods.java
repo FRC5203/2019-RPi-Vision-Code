@@ -16,7 +16,7 @@ public class VisionMethods {
     
     public static Hatch GetHatch(GripPipeline pipeline){
         
-        println("GetHatch() start");
+        //println("GetHatch() start");
         
         //Shapes that will be used to determine hatches
         ArrayList<Shape> shapes = new ArrayList<Shape>();
@@ -24,17 +24,17 @@ public class VisionMethods {
         //The list that will be assigned to the current matOfPoint in the loop
         List<Point> points;
 
-        println("Number of matofpoint's: " + pipeline.filterContoursOutput().size());
+        //println("Number of matofpoint's: " + pipeline.filterContoursOutput().size());
 
         //Loop through every matOfPoint in the output of the filterContours algorithm
         for(int m = 0; m < pipeline.filterContoursOutput().size(); m++){
             //Assign the matOfPoint, points, and shape
             MatOfPoint matOfPoint = pipeline.filterContoursOutput().get(m);
             points = matOfPoint.toList();
-            shapes.add(new Shape(points));
-            Shape shape = shapes.get(m);
+            Shape shape = new Shape();
+            shapes.add(shape);
             
-            println("Contours in matofpoint: " + pipeline.filterContoursOutput().indexOf(matOfPoint) + " = " +  points.size());
+            //println("Contours in matofpoint: " + pipeline.filterContoursOutput().indexOf(matOfPoint) + " = " +  points.size());
 
             //If there are more than 10 contours, process the points
             if(points.size() > 10){
@@ -80,6 +80,7 @@ public class VisionMethods {
             }
             //else, if the shape had 10 or less contours, it wasn't a piece of vision tape
             else{
+                println("removed a shape");
                 shapes.remove(shape);
             }
         }
@@ -89,7 +90,7 @@ public class VisionMethods {
             println("There is one hatch");
             return new Hatch(shapes.get(0), shapes.get(1));
         }
-        //else if there is more than two shapes, determine what hatches are visible and choose one
+        //else if there is more than two shapes, determine what hatches are which and choose one
         else if(shapes.size() > 2){
             ArrayList<Hatch> hatches = new ArrayList<>();
 

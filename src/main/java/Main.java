@@ -265,6 +265,8 @@ public final class Main {
       //Make the mat that will store the image data
       Mat mat = new Mat();
 
+      cameras.get(0).setResolution(160, 120);
+
       //Make a video sink for the camera feed, this sink will generate the camera feed into a mat
       CvSink cvSink = CameraServer.getInstance().getVideo();
 

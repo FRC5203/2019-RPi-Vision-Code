@@ -52,13 +52,14 @@ public class GripPipeline implements VisionPipeline {
 
 		// Step Filter_Contours0:
 		ArrayList<MatOfPoint> filterContoursContours = findContoursOutput;
-		double filterContoursMinArea = 1000.0;
+		//Oringinal alue generated from GRIP was 1000.0 however, GRIP was lying and it should be much smaller
+		double filterContoursMinArea = 300.0;
 		double filterContoursMinPerimeter = 0.0;
 		double filterContoursMinWidth = 0.0;
 		double filterContoursMaxWidth = 1000.0;
 		double filterContoursMinHeight = 0.0;
 		double filterContoursMaxHeight = 1000.0;
-		double[] filterContoursSolidity = {68.34532374100719, 100.0};
+		double[] filterContoursSolidity = {0.0, 100.0};
 		double filterContoursMaxVertices = 1000000.0;
 		double filterContoursMinVertices = 0.0;
 		double filterContoursMinRatio = 0.0;
@@ -177,9 +178,5 @@ public class GripPipeline implements VisionPipeline {
 			output.add(contour);
 		}
 	}
-
-
-
-
 }
 
